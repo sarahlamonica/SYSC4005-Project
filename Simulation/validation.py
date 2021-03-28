@@ -52,7 +52,7 @@ def validateIns2Comp3(i):
     printAvg(actualAvg, rndAvg)
 
 
-def validate_workstation1(i):
+def validateWS1(i):
     actualAvg = 0
     rndAvg = 0
     data = open('ws1.dat').read().splitlines()
@@ -69,7 +69,7 @@ def validate_workstation1(i):
     printAvg(actualAvg, rndAvg)
 
 
-def validate_workstation2(i):
+def validateWS2(i):
     actualAvg = 0
     rndAvg = 0
     data = open('ws2.dat').read().splitlines()
@@ -86,7 +86,7 @@ def validate_workstation2(i):
     printAvg(actualAvg, rndAvg)
 
 
-def validate_workstation3(i):
+def validateWS3(i):
     actualAvg = 0
     rndAvg = 0
     data = open('ws3.dat').read().splitlines()
@@ -114,6 +114,6 @@ if __name__ == '__main__':
     validateIns1Comp1(1000)
     validateIns2Comp2(1000)
     validateIns2Comp3(1000)
-    validate_workstation1(1000)
-    validate_workstation2(1000)
-    validate_workstation3(1000)
+    validateWS1(1000)
+    validateWS2(1000)
+    validateWS3(1000)
