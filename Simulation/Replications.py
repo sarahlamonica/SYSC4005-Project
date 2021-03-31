@@ -3,6 +3,45 @@ import random
 import inputmodel
 import simpy
 import numpy
+from scipy import stats
+import numpy
+
+
+class CalculateCI:
+
+    def calculateCI(d, confidence=0.95):
+
+        if not isinstance(d, list):
+            return d, 0
+        n = len(d)
+        if n is 0:
+            return 0, 0
+        mean, stdev = numpy.mean(d), stats.sem(d)
+
+        result = stdev * stats.t.ppf((1 + confidence) / 2., n - 1)
+        return mean, result
+
+    def calculate_statistics(d):
+        blockTimes1 = []
+        blockTimes2 = []
+        blockTimes3 = []
+        idleTimes1 = []
+        idleTimes2 = []
+        idleTimes3 = []
+        productsProduced1 = []
+        productsProduced2 = []
+        productsProduced3 = []
+
+        for var in d:
+            blockTimes1.extend(var.BlockTimes[1])
+            blockTimes2.extend(var.BlockTimes[2])
+            blockTimes3.extend(var.BlockTimes[3])
+            idleTimes1.extend(var.IdleTimes[1])
+            idleTimes2.extend(var.IdleTimes[2])
+            idleTimes3.extend(var.IdleTimes[3])
+            productsProduced1.append(var.Products[1])
+            productsProduced2.append(var.Products[2])
+            productsProduced3.append(var.Products[3])
 
 
 class Variables:
@@ -236,3 +275,59 @@ if __name__ == '__main__':
             results[key].extend(value)
     for key, value in results.items():
         print("" + key + " Average Service Time: " + str(numpy.mean(value)))
+
+    def calculateCI(d, confidence=0.95):
+
+        if not isinstance(d, list):
+            return d, 0
+        n = len(d)
+        if n is 0:
+            return 0, 0
+        mean, stdev = numpy.mean(d), stats.sem(d)
+
+        result = stdev * stats.t.ppf((1 + confidence) / 2., n - 1)
+        return mean, result
+
+    def calculateCIForEach(d):
+        blockTimes1 = []
+        blockTimes2 = []
+        blockTimes3 = []
+        idleTimes1 = []
+        idleTimes2 = []
+        idleTimes3 = []
+        productsProduced1 = []
+        productsProduced2 = []
+        productsProduced3 = []
+
+        for var in d:
+            blockTimes1.extend(var.BlockTimes[1])
+            blockTimes2.extend(var.BlockTimes[2])
+            blockTimes3.extend(var.BlockTimes[3])
+            idleTimes1.extend(var.IdleTimes[1])
+            idleTimes2.extend(var.IdleTimes[2])
+            idleTimes3.extend(var.IdleTimes[3])
+            productsProduced1.append(var.Products[1])
+            productsProduced2.append(var.Products[2])
+            productsProduced3.append(var.Products[3])
+
+        a, b = calculateCI(blockTimes1)
+        print("Confidence Interval: Inspector 1, Block Times: " + str(a) + " ±" + str(b))
+        c, d = calculateCI(blockTimes2)
+        print("Confidence Interval: Inspector 2, Block Times: " + str(c) + " ±" + str(d))
+        e, f = calculateCI(blockTimes3)
+        print("Confidence Interval: Inspector 3, Block Times: " + str(e) + " ±" + str(f))
+        g, h = calculateCI(idleTimes1)
+        print("Confidence Interval: Workstation 1, Idle Times: " + str(g) + " ±" + str(h))
+        i, j = calculateCI(idleTimes2)
+        print("Confidence Interval: Workstation 2, Idle Times: " + str(i) + " ±" + str(j))
+        l, m = calculateCI(idleTimes3)
+        print("Confidence Interval: Workstation 3, Idle Times: " + str(l) + " ±" + str(m))
+        o, p = calculateCI(productsProduced1)
+        print("Confidence Interval: Products Produced 1: " + str(o) + " ±" + str(p))
+        q, r = calculateCI(productsProduced2)
+        print("Confidence Interval: Products Produced 2: " + str(q) + " ±" + str(r))
+        s, t = calculateCI(productsProduced3)
+        print("Confidence Interval: Products Produced 3: " + str(s) + " ±" + str(t))
+
+
+    calculateCIForEach(varTemp)
