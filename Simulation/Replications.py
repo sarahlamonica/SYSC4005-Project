@@ -136,18 +136,30 @@ class Inspector1:
             stime = inputmodel.inspector1()  # Generate random number for service time
             self.var.AddInsp1_ServiceTime(stime)
 
-            # Finds the container with the smallest # of type 1 components
+            is_alternative = False
+
             yield self.env.timeout(stime)
             btime = self.env.now
-            if self.ws1.self_container.level <= self.ws2.container1.level or \
-                    self.ws1.self_container.level <= self.ws3.container1.level:
-                yield self.ws1.self_container.put(1)
+            if not is_alternative:
+                # Finds the container with the smallest # of type 1 components
+                if self.ws1.self_container.level <= self.ws2.container1.level or \
+                        self.ws1.self_container.level <= self.ws3.container1.level:
+                    yield self.ws1.self_container.put(1)
 
-            elif self.ws2.container1.level <= self.ws3.container1.level:
-                yield self.ws2.container1.put(1)
+                elif self.ws2.container1.level <= self.ws3.container1.level:
+                    yield self.ws2.container1.put(1)
+                else:
+                    yield self.ws3.container1.put(1)
+                self.var.AddInsp1_BlockTime(self.env.now - btime)
             else:
-                yield self.ws3.container1.put(1)
-            self.var.AddInsp1_BlockTime(self.env.now - btime)
+                if self.ws3.container1.level <= self.ws2.container1.level or \
+                        self.ws3.container1.level <= self.ws1.self_container.level:
+                    yield self.ws3.container1.put(1)
+                elif self.ws2.container1.level <= self.ws1.self_container.level:
+                    yield self.ws2.container1.put(1)
+                else:
+                    yield self.ws1.self_container.put(1)
+                self.var.AddInsp1_BlockTime(self.env.now - btime)
 
 
 class Inspector2:
